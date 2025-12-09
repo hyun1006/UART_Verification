@@ -35,17 +35,17 @@
 ```mermaid
 graph LR
     subgraph "SystemVerilog Environment"
-        GEN[Generator] -->|Put Trans| MBX1((Gen2Drv<br>Mailbox))
+        GEN[Generator] -->|Put Trans| MBX1(("Gen2Drv Mailbox"))
         MBX1 -->|Get Trans| DRV[Driver]
         
         DRV -->|Virtual Interface| IF[UART Interface]
-        IF <==> DUT[UART Controller<br>(RTL Design)]
+        IF <==> DUT["UART Controller (RTL Design)"]
         IF -->|Sample| MON[Monitor]
         
-        MON -->|Put Trans| MBX2((Mon2Scb<br>Mailbox))
+        MON -->|Put Trans| MBX2(("Mon2Scb Mailbox"))
         MBX2 -->|Get Trans| SCB[Scoreboard]
         
-        DRV -.->|Copy Expected| MBX3((Drv2Scb<br>Mailbox)) -.-> SCB
+        DRV -.->|Copy Expected| MBX3(("Drv2Scb Mailbox")) -.-> SCB
     end
     
     SCB -->|Compare| RESULT[Pass/Fail Report]
@@ -55,11 +55,11 @@ graph LR
 
 | 컴포넌트 (Class) | 역할 (Role) | 기술적 구현 (Technical Detail) |
 | :--- | :--- | :--- |
-| **Transaction** | [cite_start]데이터 추상화 | [cite: 485] `randc`로 선언된 8-bit Payload를 포함하며, 전송할 데이터 패킷을 객체화합니다. |
-| **Generator** | [cite_start]자극 생성 | [cite: 489] `assert(trans.randomize())`를 통해 제약 조건 내에서 유효한 랜덤 데이터를 생성하여 Driver로 전달합니다. |
-| **Driver** | [cite_start]신호 구동 | [cite: 498] 트랜잭션을 물리적 신호로 변환합니다. `Virtual Interface`를 통해 DUT의 Rx 핀에 UART 프로토콜(Start-Data-Stop)을 인가합니다. |
-| **Monitor** | [cite_start]신호 감지 | [cite: 504] 인터페이스의 Tx 라인을 모니터링하다가 데이터가 감지되면, 비트를 샘플링하여 트랜잭션 객체로 재조립합니다. |
-| **Scoreboard** | [cite_start]무결성 검증 | [cite: 518] Driver가 보낸 \*\*기대값(Expected)\*\*과 Monitor가 수집한 \*\*실제값(Actual)\*\*을 비교하여 실시간으로 Pass/Fail을 판정합니다. |
+| **Transaction** | 데이터 추상화 | `randc`로 선언된 8-bit Payload를 포함하며, 전송할 데이터 패킷을 객체화합니다. |
+| **Generator** | 자극 생성 | `assert(trans.randomize())`를 통해 제약 조건 내에서 유효한 랜덤 데이터를 생성하여 Driver로 전달합니다. |
+| **Driver** | 신호 구동 | 트랜잭션을 물리적 신호로 변환합니다. `Virtual Interface`를 통해 DUT의 Rx 핀에 UART 프로토콜(Start-Data-Stop)을 인가합니다. |
+| **Monitor** | 신호 감지 | 인터페이스의 Tx 라인을 모니터링하다가 데이터가 감지되면, 비트를 샘플링하여 트랜잭션 객체로 재조립합니다. |
+| **Scoreboard** | 무결성 검증 | Driver가 보낸 \*\*기대값(Expected)\*\*과 Monitor가 수집한 \*\*실제값(Actual)\*\*을 비교하여 실시간으로 Pass/Fail을 판정합니다. |
 
 -----
 
@@ -78,9 +78,9 @@ graph LR
 
   * **목적:** 실제 애플리케이션(카운터/타이머) 제어 프로토콜 검증.
   * **시나리오:**
-      * [cite_start]**Command 'r' (Run):** [cite: 569] `send_char("r")` 호출 → 시스템 Enable 신호 활성화 확인.
-      * [cite_start]**Command 'c' (Clear):** [cite: 571] `send_char("c")` 호출 → 내부 레지스터 초기화 확인.
-      * [cite_start]**Command 'm' (Mode):** [cite: 573] `send_char("m")` 호출 → 동작 모드 전환 확인.
+      * **Command 'r' (Run):** `send_char("r")` 호출 → 시스템 Enable 신호 활성화 확인.
+      * **Command 'c' (Clear):** `send_char("c")` 호출 → 내부 레지스터 초기화 확인.
+      * **Command 'm' (Mode):** `send_char("m")` 호출 → 동작 모드 전환 확인.
 
 -----
 
@@ -92,7 +92,7 @@ graph LR
 
 ```systemverilog
 // Driver Class Example
-virtual uart_interface uart_if; [cite_start]// [cite: 492] Virtual Interface handle
+virtual uart_interface uart_if; // Virtual Interface handle
 task run();
     uart_if.rx = 1'b0; // Drive logic via interface
     ...
@@ -105,9 +105,9 @@ endtask
 
 ```systemverilog
 // Generator puts data
-gen2drv_mbox.put(trans); [cite_start]// [cite: 490]
+gen2drv_mbox.put(trans); //
 // Driver gets data
-gen2drv_mbox.get(trans); [cite_start]// [cite: 496]
+gen2drv_mbox.get(trans); //
 ```
 
 ### 4.3 Self-Checking Scoreboard
@@ -117,10 +117,10 @@ gen2drv_mbox.get(trans); [cite_start]// [cite: 496]
 ```systemverilog
 if (trans.send_data == tr.send_data) begin
     pass_count++;
-    $display("[SCB] data matched!"); [cite_start]// [cite: 519]
+    $display("[SCB] data matched!"); //
 end else begin
     fail_count++;
-    $display("[SCB] mismatch!"); [cite_start]// [cite: 522]
+    $display("[SCB] mismatch!"); //
 end
 ```
 
@@ -134,9 +134,9 @@ end
 ===================================
 =========== test report ===========
 ===================================
-[cite_start]==    Total Test : 256           ==  <-- [cite: 528] Generated Packets
-[cite_start]==    Pass Test  : 256           ==  <-- [cite: 529] Matched Transactions
-[cite_start]==    Fail Test  : 0             ==  <-- [cite: 530] Mismatched / Errors
+==    Total Test : 256           ==  <-- Generated Packets
+==    Pass Test  : 256           ==  <-- Matched Transactions
+==    Fail Test  : 0             ==  <-- Mismatched / Errors
 ===================================
 ==     Testbench is finished     ==
 ===================================
@@ -149,14 +149,14 @@ end
 ```text
 📦 UART-SystemVerilog-Verification
  ┣ 📂 src
- [cite_start]┃ ┣ 📜 uart_top.sv         # [DUT] UART Top (FIFO + RX/TX) [cite: 1]
- [cite_start]┃ ┣ 📜 uart_rx.sv          # [DUT] RX Module (Oversampling) [cite: 228]
- [cite_start]┃ ┣ 📜 uart_tx.sv          # [DUT] TX Module [cite: 8]
- [cite_start]┃ ┗ 📜 fifo.sv             # [DUT] Circular FIFO Buffer [cite: 35]
+ ┃ ┣ 📜 uart_top.sv         # [DUT] UART Top (FIFO + RX/TX)
+ ┃ ┣ 📜 uart_rx.sv          # [DUT] RX Module (Oversampling)
+ ┃ ┣ 📜 uart_tx.sv          # [DUT] TX Module
+ ┃ ┗ 📜 fifo.sv             # [DUT] Circular FIFO Buffer
  ┣ 📂 verification
- [cite_start]┃ ┣ 📜 tb_uart_top.sv      # [TB] Random Verification Top (Class definitions) [cite: 485]
- [cite_start]┃ ┣ 📜 tb_uart_rx.sv       # [TB] RX Unit Test [cite: 260]
- [cite_start]┃ ┗ 📜 tb_top_function.sv  # [TB] Functional Scenario Test [cite: 553]
+ ┃ ┣ 📜 tb_uart_top.sv      # [TB] Random Verification Top (Class definitions)
+ ┃ ┣ 📜 tb_uart_rx.sv       # [TB] RX Unit Test
+ ┃ ┗ 📜 tb_top_function.sv  # [TB] Functional Scenario Test
  ┗ 📜 README.md             # Project Documentation
 ```
 

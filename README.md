@@ -1,6 +1,6 @@
 # 🧪 SystemVerilog UART Verification Framework
 
-<div align="center">
+<div">
 
 <img src="https://img.shields.io/badge/Language-SystemVerilog-green?style=for-the-badge&logo=systemverilog" />
 <img src="https://img.shields.io/badge/Methodology-UVM_Style_OOP-blue?style=for-the-badge" />

@@ -9,6 +9,7 @@
 
 <br>
 
+
 **Constrained Random Verification (CRV) & Self-Checking Environment**<br>
 객체 지향 프로그래밍(OOP)을 적용한 계층적 테스트벤치(Layered Testbench) 설계 및 자동화된 검증 시스템
 
@@ -164,11 +165,8 @@ end
 
 검증 환경의 상세 설계 구조와 시뮬레이션 파형 분석 결과는 아래 보고서를 통해 확인하실 수 있습니다.
 
-\<div align="center"\>
+[![PDF Report](https://img.shields.io/badge/📄_PDF_Report-View_Document-FF0000?style=for-the-badge&logo=adobeacrobatreader&logoColor=white)](https://github.com/seokhyun-hwang/files/blob/main/UART_Verification.pdf)
 
-[![PDF Report](https://img.shields.io/badge/📄_PDF_Report-View_Document-FF0000?style=for-the-badge&logo=adobeacrobatreader&logoColor=white)](https://www.google.com/search?q=https://github.com/seokhyun-hwang/files/blob/main/UART_Verification.pdf)
-
-\</div\>
 
 -----
 
